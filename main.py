@@ -4,6 +4,30 @@ import sys
 commands = {'echo':True, 'pwd':True, 'exit':True, 'type':True}
 PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
+def tokenizer(input) : 
+    in_quote = False
+    element = ""
+    List = []
+    for i in input:
+        if ( i == '\'' and in_quote == False ) :
+            in_quote = True
+            continue
+        elif ( i == '\'' and in_quote == True ) :
+            in_quote = False
+            continue
+        elif(in_quote == True):
+            element = element + i
+        elif ( i == ' ') :
+            if element != "" :
+                List.append(element)
+            element = ""
+            continue
+        else :
+            element = element + i
+    if element != "" :
+        List.append(element)
+    return List       
+                 
 def exity(number = 0):
     print("# Shell exits with code", number)
     sys.exit(number)
@@ -55,13 +79,14 @@ def ch_dir(path):
             print(f"en Error Occured:{e}")
 
 while True:
-    shell_input = input("$ ").split(" ")
+    shell_input = input("$ ")
+    shell_input = tokenizer(shell_input)
     output = ""
-    if len(shell_input) > 1 :
-        while shell_input[1] == '':
-            shell_input.pop(1)
-            if len(shell_input) == 1 :
-                break
+    # if len(shell_input) > 1 :
+    #     while shell_input[1] == '':
+    #         shell_input.pop(1)
+    #         if len(shell_input) == 1 :
+    #             break
     if shell_input[0] == "echo" : 
         for i in range(1,len(shell_input)):
             output += shell_input[i] + " "
